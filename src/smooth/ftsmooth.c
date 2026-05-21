@@ -137,6 +137,10 @@
     TOrigin            target;
 
 
+    /* Reject outlines too wide for 16-bit FT_Span.x — see ft_smooth_raster_overlap. */
+    if ( bitmap->width / 3 > 0x7FFF )
+      return FT_THROW( Raster_Overflow );
+
     /* Render 3 separate coverage bitmaps, shifting the outline.  */
     /* Set up direct rendering to record them on each third byte. */
     params.source     = outline;
@@ -203,6 +207,10 @@
 
     FT_Raster_Params  params;
 
+
+    /* Reject outlines too high — see ft_smooth_raster_overlap. */
+    if ( bitmap->rows / 3 > 0x7FFF )
+      return FT_THROW( Raster_Overflow );
 
     params.target = bitmap;
     params.source = outline;
